@@ -9,7 +9,6 @@ interface Props {
 }
 
 function SearchResultsList({ searchResults, cachedResults }: Props) {
-  console.log(searchResults, cachedResults);
   return (
     <List>
       {cachedResults && cachedResults.length > 0 && (

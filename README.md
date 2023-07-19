@@ -29,11 +29,13 @@ src
 
 ### API 호출별로 로컬 캐싱 구현
 
+-expire time을 지정하여 캐싱 내역이 초기화 되도록 설정
+
 ### 입력마다 API 호출하지 않도록 API 호출 횟수를 줄이는 전략 수립 및 실행
 
-### API를 호출할 때 마다 `console.info("calling api")` 출력을 통해 콘솔창에서 API 호출 횟수 확인이 가능하도록 설정
+- debonce 적용
 
-### 키보드만으로 추천 검색어들로 이동 가능하도록 구현
+### API를 호출할 때 마다 `console.info("calling api")` 출력을 통해 콘솔창에서 API 호출 횟수 확인이 가능하도록 설정
 
 ## 프로젝트 실행 방법
 
@@ -48,9 +50,3 @@ $ npm start
 ## 사용 기술
 
 <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=TypeScript&logoColor=white"> <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=black"> <img src="https://img.shields.io/badge/Styled_Components-DB7093?style=for-the-badge&logo=styledcomponents&logoColor=white">
-
-## 데모 영상
-
-<p align="center">
-<img src='' width='600px' height='800px'/>
-</p>
