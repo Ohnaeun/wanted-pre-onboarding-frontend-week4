@@ -43,7 +43,7 @@ src
 
 ```
 $ git clone https://github.com/Ohnaeun/wanted-pre-onboarding-frontend-week4
-$ npm install
+$ npm install --legacy-peer-deps / npm install --force (협업은 아니지만 eslint, prettier를 설정함)
 $ npm start
 ```
 
