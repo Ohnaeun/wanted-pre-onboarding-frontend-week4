@@ -1,16 +1,30 @@
 import React, { useState } from 'react';
 import useSearch from '../hooks/useSearch';
+import SearchResultsList from './SearchResultsList';
 import styled from 'styled-components';
 import { ReactComponent as SearchIcon } from '../assets/search.svg';
 
 function SearchBar() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const { searchResults } = useSearch(searchTerm);
+  const {
+    searchTerm,
+    searchResults,
+    setSearchTerm,
+    handleButtonClick,
+    cachedResults,
+  } = useSearch();
+  const [isFocused, setIsFocused] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+  };
   return (
     <SearchContainer>
       <SearchInput>
@@ -19,25 +33,19 @@ function SearchBar() {
           placeholder="질환명을 입력해 주세요."
           value={searchTerm}
           onChange={handleChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
         />
-        <SearchButton>
+        <SearchButton onClick={handleButtonClick}>
           <SearchIcon />
         </SearchButton>
       </SearchInput>
-      <ul>
-        {searchResults === null ? (
-          <li>검색 중...</li>
-        ) : searchResults.length === 0 && searchTerm ? (
-          <li>검색어 없음</li>
-        ) : (
-          searchResults.map((result, index) => (
-            <li key={index}>
-              <SearchIcon />
-              {result.sickNm}
-            </li>
-          ))
-        )}
-      </ul>
+      {isFocused ? (
+        <SearchResultsList
+          searchResults={searchResults}
+          cachedResults={cachedResults}
+        />
+      ) : null}
     </SearchContainer>
   );
 }
@@ -46,38 +54,7 @@ export default SearchBar;
 
 const SearchContainer = styled.div`
   width: 490px;
-  ul {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    background-color: #fff;
-    border-radius: 20px;
-    margin-top: 8px;
-    padding: 24px 0 16px;
-    box-shadow: rgba(30, 32, 37, 0.1) 0px 2px 10px;
-  }
-  li {
-    width: 100%;
-    padding: 8px 24px;
-    display: flex;
-    align-items: center;
-    font-size: 1rem;
-    font-weight: 400;
-    letter-spacing: -0.018em;
-    line-height: 1.6;
-    cursor: pointer;
-
-    &:hover {
-      background-color: rgb(248, 249, 250);
-    }
-
-    svg {
-      width: 20px;
-      height: 20px;
-      margin-right: 12px;
-      fill: #a7afb7;
-    }
-  }
+  position: relative;
 `;
 
 const SearchInput = styled.div`

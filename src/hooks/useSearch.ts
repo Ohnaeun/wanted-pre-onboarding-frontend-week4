@@ -1,41 +1,39 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { EXPIRE_TIME_MS } from '../constants/time';
+import { DELAY_MS, EXPIRE_TIME_MS } from '../constants/time';
 import { SickProps } from 'types/sick';
+import useDebounce from './useDebounce';
 
-const useSearch = (term: string) => {
-  const [searchTerm, setSearchTerm] = useState(term);
+function useSearch() {
+  const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState<SickProps[]>([]);
-  const [cachedResults, setCachedResults] = useState<{
-    [term: string]: SickProps[];
-  }>({});
+  const [cachedResults, setCachedResults] = useState<string[]>([]);
+  const debouncedSearchTerm = useDebounce(searchTerm, DELAY_MS);
 
-  const fetchSearchResults = async (searchTerm: string) => {
+  const fetchSearchResults = async (term: string) => {
     try {
       console.info('calling api');
 
-      if (cachedResults[term]) {
-        setSearchResults(cachedResults[term]);
-      } else {
-        const response = await axios.get(
-          `http://localhost:4000/sick?q=${searchTerm}`,
-        );
-        const results = response.data.slice(0, 7);
-        setSearchResults(results);
-
-        setCachedResults((prevCachedResults) => ({
-          ...prevCachedResults,
-          [term]: results,
-        }));
-      }
+      const response = await axios.get(
+        `http://localhost:4000/sick?q=${searchTerm}`,
+      );
+      const results = response.data.slice(0, 7);
+      setSearchResults(results);
     } catch (error) {
       console.error(error);
     }
   };
 
-  useEffect(() => {
-    setSearchTerm(term);
-  }, [term]);
+  const handleButtonClick = () => {
+    if (searchTerm) {
+      setCachedResults((prevCachedResults) => [
+        ...prevCachedResults,
+        searchTerm,
+      ]);
+      setSearchTerm('');
+      setSearchResults([]);
+    }
+  };
 
   useEffect(() => {
     if (searchTerm) {
@@ -43,17 +41,19 @@ const useSearch = (term: string) => {
     } else {
       setSearchResults([]);
     }
+
+    if (debouncedSearchTerm) {
+      fetchSearchResults(debouncedSearchTerm);
+    }
   }, [searchTerm]);
 
-  useEffect(() => {
-    const timerId = setTimeout(() => {
-      setCachedResults({});
-    }, EXPIRE_TIME_MS);
-
-    return () => clearTimeout(timerId);
-  }, []);
-
-  return { searchTerm, searchResults, setSearchTerm };
-};
+  return {
+    searchTerm,
+    searchResults,
+    cachedResults,
+    setSearchTerm,
+    handleButtonClick,
+  };
+}
 
 export default useSearch;
