@@ -29,7 +29,7 @@ src
 
 ### API 호출별로 로컬 캐싱 구현
 
--expire time을 지정하여 캐싱 내역이 초기화 되도록 설정
+- expire time을 지정하여 캐싱 내역이 초기화 되도록 설정
 
 ### 입력마다 API 호출하지 않도록 API 호출 횟수를 줄이는 전략 수립 및 실행
 
@@ -43,7 +43,7 @@ src
 
 ```
 $ git clone https://github.com/Ohnaeun/wanted-pre-onboarding-frontend-week4
-$ npm install --legacy-peer-deps / npm install --force (협업은 아니지만 eslint, prettier를 설정함)
+$ npm install --force (협업은 아니지만 eslint, prettier를 설정함)
 $ npm start
 ```
 
