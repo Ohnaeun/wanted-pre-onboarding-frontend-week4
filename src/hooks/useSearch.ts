@@ -41,7 +41,6 @@ function useSearch() {
     } else {
       setSearchResults([]);
     }
-
     if (debouncedSearchTerm) {
       fetchSearchResults(debouncedSearchTerm);
     }
